@@ -1,0 +1,82 @@
+import allure
+import pytest
+from random import randint
+
+
+class TestBurger:
+
+    @allure.title('Проверка работы метода Burger.set_buns()')
+    def test_set_buns_sets_burger_buns(self, some_bun, burger):
+        with allure.step(f'Добавляем в бургер булочку'):
+            burger.set_buns(some_bun)
+
+        with allure.step(f'Проверяем, что метод возвращает ожидаемое значение'):
+            assert burger.bun == some_bun
+
+    @allure.title('Проверка работы метода Burger.add_ingredient()')
+    @pytest.mark.parametrize('some_ingredients', ['1', '2'], indirect=True)
+    def test_add_ingredient_ingredient_added(self, some_ingredients, burger):
+        with allure.step(f'Добавляем в бургер ингредиенты'):
+            for i in some_ingredients:
+                burger.add_ingredient(i)
+
+        with allure.step(f'Проверяем, что метод возвращает ожидаемое значение'):
+            assert burger.ingredients == some_ingredients
+
+    @allure.title('Проверка работы метода Burger.remove_ingredient()')
+    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
+    def test_remove_ingredient_ingredient_removed(self, some_ingredients, burger):
+        with allure.step(f'Добавляем в бургер ингредиенты'):
+            for i in some_ingredients:
+                burger.add_ingredient(i)
+
+        random_index = randint(0, len(some_ingredients) - 1)
+        with allure.step(f'Удаляем из бургера ингредиент № {random_index}'):
+            burger.remove_ingredient(random_index)
+
+        with allure.step(f'Проверяем, что метод возвращает ожидаемое значение'):
+            del some_ingredients[random_index]
+            assert burger.ingredients == some_ingredients
+
+    @allure.title('Проверка работы метода Burger.move_ingredient()')
+    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
+    def test_move_ingredient_ingredient_moved(self, some_ingredients, burger):
+        with allure.step(f'Добавляем в бургер ингредиенты'):
+            for i in some_ingredients:
+                burger.add_ingredient(i)
+
+        random_index1 = randint(0, len(some_ingredients) - 1)
+        random_index2 = randint(0, len(some_ingredients) - 1)
+        with allure.step(f'Меняем  ингредиенты № {random_index1} и № {random_index2} местами'):
+            burger.move_ingredient(random_index1, random_index2)
+
+        with allure.step(f'Проверяем, что метод возвращает ожидаемое значение'):
+            some_ingredients.insert(random_index2, some_ingredients.pop(random_index1))
+            assert burger.ingredients == some_ingredients
+
+    @allure.title('Проверка работы метода Burger.get_price()')
+    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
+    def test_get_price_price_calculated(self, some_bun, some_ingredients, burger):
+        with allure.step(f'Добавляем в бургер булочку'):
+            burger.set_buns(some_bun)
+        with allure.step(f'Добавляем в бургер ингредиенты'):
+            for i in some_ingredients:
+                burger.add_ingredient(i)
+
+        with allure.step(f'Проверяем, что метод возвращает ожидаемую цену'):
+            buns_price = some_bun.price * 2
+            ingredients_price = sum(list(map(lambda x: x.price, some_ingredients)))
+            assert burger.get_price() == buns_price + ingredients_price
+
+    @allure.title('Проверка работы метода Burger.get_receipt()')
+    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
+    def test_get_receipt_return_expected_receipt(self, some_bun, some_ingredients, burger):
+        with allure.step(f'Добавляем в бургер булочку'):
+            burger.set_buns(some_bun)
+        with allure.step(f'Добавляем в бургер ингредиенты'):
+            for i in some_ingredients:
+                burger.add_ingredient(i)
+
+        with allure.step(f'Проверяем, что в рецепте есть нужные компоненты'):
+            assert (some_bun.name in burger.get_receipt() and
+                    all([x.name in burger.get_receipt() for x in some_ingredients]))
