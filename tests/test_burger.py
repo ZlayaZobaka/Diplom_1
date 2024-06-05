@@ -2,6 +2,7 @@ import allure
 import helpers
 import pytest
 from random import randint
+from data import Recipes
 from praktikum.burger import Burger
 
 
@@ -87,18 +88,17 @@ class TestBurger:
             assert burger.get_price() == buns_price + ingredients_price
 
     @allure.title('Проверка работы метода Burger.get_receipt()')
-    @pytest.mark.parametrize('count', ['1', '5'])
-    def test_get_receipt_return_expected_receipt(self, count):
+    @pytest.mark.parametrize('recipe', [Recipes.RECIPE_1, Recipes.RECIPE_2])
+    def test_get_receipt_return_expected_receipt(self, recipe):
         with allure.step('Создаем объект Burger'):
             burger = Burger()
         with allure.step(f'Добавляем в бургер булочку'):
-            some_bun = helpers.get_bun()
-            burger.set_buns(some_bun)
+            bun = helpers.get_recipe_bun(recipe)
+            burger.set_buns(bun)
         with allure.step(f'Добавляем в бургер ингредиенты'):
-            some_ingredients = helpers.get_some_ingredients(count)
+            some_ingredients = helpers.get_recipe_ingredient(recipe)
             for i in some_ingredients:
                 burger.add_ingredient(i)
 
-        with allure.step(f'Проверяем, что в рецепте есть нужные компоненты'):
-            assert (some_bun.name in burger.get_receipt() and
-                    all([x.name in burger.get_receipt() for x in some_ingredients]))
+        with allure.step(f'Проверяем, что в рецепт совпадает с ожидаемым'):
+            assert burger.get_receipt() == recipe['text']
