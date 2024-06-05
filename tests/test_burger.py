@@ -93,10 +93,10 @@ class TestBurger:
         with allure.step('Создаем объект Burger'):
             burger = Burger()
         with allure.step(f'Добавляем в бургер булочку'):
-            bun = helpers.get_recipe_bun(recipe)
+            bun = helpers.get_recipe_buns(recipe)[0]
             burger.set_buns(bun)
         with allure.step(f'Добавляем в бургер ингредиенты'):
-            some_ingredients = helpers.get_recipe_ingredient(recipe)
+            some_ingredients = helpers.get_recipe_ingredients(recipe)
             for i in some_ingredients:
                 burger.add_ingredient(i)
 

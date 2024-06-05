@@ -1,14 +1,25 @@
-class DefaultIngredients:
-    BUNS_NAMES = ['black bun', 'white bun', 'red bun']
-    BUNS_PRICES = [100, 200, 300]
-    INGREDIENTS_TYPES = {'SAUCE', 'FILLING'}
-    INGREDIENTS_NAMES = ['hot sauce', 'sour cream', 'chili sauce', 'cutlet', 'dinosaur', 'sausage']
-    INGREDIENTS_PRICES = {100, 200, 300}
-
-
 class Recipes:
+    DEFAULT_DB = {
+        'buns': [
+            ['black bun', 100],
+            ['white bun', 200],
+            ['red bun', 300]
+        ],
+        'ingredients': [
+            ['SAUCE', 'hot sauce', 100],
+            ['SAUCE', 'sour cream', 200],
+            ['SAUCE', 'chili sauce', 300],
+            ['FILLING', "cutlet", 100],
+            ['FILLING', "dinosaur", 200],
+            ['FILLING', "sausage", 300],
+
+        ]
+    }
+
     RECIPE_1 = {
-        'bun': ['test bun', 20],
+        'buns': [
+            ['test bun', 20]
+        ],
         'ingredients': [
             ['test sauce', 'sauce', 10],
             ['test meat', 'meat', 50],
@@ -19,7 +30,9 @@ class Recipes:
     }
 
     RECIPE_2 = {
-        'bun': ['rye bread', 42],
+        'buns': [
+            ['rye bread', 42]
+        ],
         'ingredients': [
             ['mayonnaise', 'sauce', 23],
             ['ostankino sausage', 'meat', 32],

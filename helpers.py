@@ -1,4 +1,5 @@
 import allure
+import praktikum.ingredient
 from faker import Faker
 from unittest.mock import Mock
 
@@ -33,10 +34,23 @@ def get_some_ingredients(count):
 
 
 @allure.title('Извлекаем из рецепта булочку')
-def get_recipe_bun(recipe):
-    return get_bun(recipe['bun'])
+def get_recipe_buns(recipe):
+    return [get_bun(x) for x in recipe['buns']]
 
 
 @allure.title('Извлекаем из рецепта ингредиенты')
-def get_recipe_ingredient(recipe):
+def get_recipe_ingredients(recipe):
     return [get_ingredient(x) for x in recipe['ingredients']]
+
+
+@allure.title('Сравниваем списки')
+def compare(list1, list2):
+    if len(list1) != len(list2):
+        return False
+    for i in range(len(list1)):
+        if list1[i].name != list2[i].name or list1[i].price != list2[i].price:
+            return False
+        elif type(list1) is praktikum.ingredient.Ingredient and list1[i].ingredient_type != list2[i].ingredient_type:
+            return False
+
+    return True

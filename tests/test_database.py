@@ -1,6 +1,7 @@
 import allure
+import helpers
 from praktikum.database import Database
-from data import DefaultIngredients
+from data import Recipes
 
 
 class TestDatabase:
@@ -30,9 +31,8 @@ class TestDatabase:
             database = Database()
         with allure.step('Проверяем, что возвращается значение по умолчанию'):
             buns = database.available_buns()
-            assert (len(buns) == 3 and
-                    [bun.name for bun in buns] == DefaultIngredients.BUNS_NAMES and
-                    [bun.price for bun in buns] == DefaultIngredients.BUNS_PRICES)
+            expected_buns = helpers.get_recipe_buns(Recipes.DEFAULT_DB)
+            assert helpers.compare(buns, expected_buns)
 
     @allure.title('Проверка возвращаемого по умолчанию значения метода Database.available_ingredients()')
     def test_available_ingredients_return_default_buns_list(self):
@@ -40,7 +40,5 @@ class TestDatabase:
             database = Database()
         with allure.step('Проверяем, что возвращается значение по умолчанию'):
             ingredients = database.available_ingredients()
-        assert (len(ingredients) == 6 and
-                set([ingredient.type for ingredient in ingredients]) == DefaultIngredients.INGREDIENTS_TYPES and
-                set([ingredient.price for ingredient in ingredients]) == DefaultIngredients.INGREDIENTS_PRICES and
-                [ingredient.name for ingredient in ingredients] == DefaultIngredients.INGREDIENTS_NAMES)
+            expected_ingredients = helpers.get_recipe_ingredients(Recipes.DEFAULT_DB)
+        assert helpers.compare(ingredients, expected_ingredients)
