@@ -1,22 +1,30 @@
 import allure
+import helpers
 import pytest
 from random import randint
+from praktikum.burger import Burger
 
 
 class TestBurger:
 
     @allure.title('Проверка работы метода Burger.set_buns()')
-    def test_set_buns_sets_burger_buns(self, some_bun, burger):
+    def test_set_buns_sets_burger_buns(self):
+        with allure.step('Создаем объект Burger'):
+            burger = Burger()
         with allure.step(f'Добавляем в бургер булочку'):
+            some_bun = helpers.get_bun()
             burger.set_buns(some_bun)
 
         with allure.step(f'Проверяем, что метод возвращает ожидаемое значение'):
             assert burger.bun == some_bun
 
     @allure.title('Проверка работы метода Burger.add_ingredient()')
-    @pytest.mark.parametrize('some_ingredients', ['1', '2'], indirect=True)
-    def test_add_ingredient_ingredient_added(self, some_ingredients, burger):
+    @pytest.mark.parametrize('count', ['1', '2'])
+    def test_add_ingredient_ingredient_added(self, count):
+        with allure.step('Создаем объект Burger'):
+            burger = Burger()
         with allure.step(f'Добавляем в бургер ингредиенты'):
+            some_ingredients = helpers.get_some_ingredients(count)
             for i in some_ingredients:
                 burger.add_ingredient(i)
 
@@ -24,9 +32,12 @@ class TestBurger:
             assert burger.ingredients == some_ingredients
 
     @allure.title('Проверка работы метода Burger.remove_ingredient()')
-    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
-    def test_remove_ingredient_ingredient_removed(self, some_ingredients, burger):
+    @pytest.mark.parametrize('count', ['1', '5'])
+    def test_remove_ingredient_ingredient_removed(self, count):
+        with allure.step('Создаем объект Burger'):
+            burger = Burger()
         with allure.step(f'Добавляем в бургер ингредиенты'):
+            some_ingredients = helpers.get_some_ingredients(count)
             for i in some_ingredients:
                 burger.add_ingredient(i)
 
@@ -39,9 +50,12 @@ class TestBurger:
             assert burger.ingredients == some_ingredients
 
     @allure.title('Проверка работы метода Burger.move_ingredient()')
-    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
-    def test_move_ingredient_ingredient_moved(self, some_ingredients, burger):
+    @pytest.mark.parametrize('count', ['1', '5'])
+    def test_move_ingredient_ingredient_moved(self, count):
+        with allure.step('Создаем объект Burger'):
+            burger = Burger()
         with allure.step(f'Добавляем в бургер ингредиенты'):
+            some_ingredients = helpers.get_some_ingredients(count)
             for i in some_ingredients:
                 burger.add_ingredient(i)
 
@@ -55,11 +69,15 @@ class TestBurger:
             assert burger.ingredients == some_ingredients
 
     @allure.title('Проверка работы метода Burger.get_price()')
-    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
-    def test_get_price_price_calculated(self, some_bun, some_ingredients, burger):
+    @pytest.mark.parametrize('count', ['1', '5'])
+    def test_get_price_price_calculated(self, count):
+        with allure.step('Создаем объект Burger'):
+            burger = Burger()
         with allure.step(f'Добавляем в бургер булочку'):
+            some_bun = helpers.get_bun()
             burger.set_buns(some_bun)
         with allure.step(f'Добавляем в бургер ингредиенты'):
+            some_ingredients = helpers.get_some_ingredients(count)
             for i in some_ingredients:
                 burger.add_ingredient(i)
 
@@ -69,11 +87,15 @@ class TestBurger:
             assert burger.get_price() == buns_price + ingredients_price
 
     @allure.title('Проверка работы метода Burger.get_receipt()')
-    @pytest.mark.parametrize('some_ingredients', ['1', '5'], indirect=True)
-    def test_get_receipt_return_expected_receipt(self, some_bun, some_ingredients, burger):
+    @pytest.mark.parametrize('count', ['1', '5'])
+    def test_get_receipt_return_expected_receipt(self, count):
+        with allure.step('Создаем объект Burger'):
+            burger = Burger()
         with allure.step(f'Добавляем в бургер булочку'):
+            some_bun = helpers.get_bun()
             burger.set_buns(some_bun)
         with allure.step(f'Добавляем в бургер ингредиенты'):
+            some_ingredients = helpers.get_some_ingredients(count)
             for i in some_ingredients:
                 burger.add_ingredient(i)
 
